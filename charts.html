@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <html lang="en">
+            <meta charset="UTF-8"/>
+            <title>
+                Charts
+            </title>
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <title>
+                Event block
+            </title>
+            <!-- Uber Fonts (Clan Pro) -->
+            <link href="https://d1a3f4spazzrp4.cloudfront.net/uber-fonts/4.0.0/superfine.css" rel="stylesheet"/> 
+            <link href="https://uber-static.s3.amazonaws.com/emails/2016/CSS/superfine.css" rel="stylesheet"/>
+            <!-- include the style -->
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/alertifyjs/1.6.1/css/alertify.min.css"/>
+            <!-- include a theme -->
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/alertifyjs/1.6.1/css/themes/default.min.css"/>
+            <link rel="stylesheet" href="./css/charts.css"/>
+            <link rel="stylesheet" href="../css/nav.css"/>
+        </head>
+        <body>
+<nav class="top-bar top-bar--dark">
+            <div class="content">
+                <a class="top-bar__logo float--left" href="../index.html">
+                    <span class="top-bar__title text-white soft">
+                        Wise
+                    </span>
+                </a>
+                <ul class="top-bar__nav top-bar__nav--left palm-top-bar__nav--stacked ">
+                    <li class="top-bar__item dib">
+                        <div class="navDrop">
+                            <a href="#">
+                                Email Tools
+                            </a>
+                            <div class="items">
+                                <ul>
+                                    <li>
+                                        <a href="./charts.html">
+                                            Charts
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="./tables.html">
+                                            Tables
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="./collapse.html">
+                                            Collapse
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="top-bar__item dib">
+                        <div class="navDrop">
+                            <a href="#">
+                                General Tools
+                            </a>
+                            <div class="items">
+                                <ul>
+                                    <li>
+                                        <a href="./lookup.html">
+                                            City Search
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="./project_namer.html">
+                                            Name Generator
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+            <div class="content">
+                <div class="layout">
+                    <div class="layout__item soft">
+                        <p class="small">To be used in ExactTarget. Select version and # of bars, then enter the relevent information. Animation will not work if you place it anywhere but a chart template. Colors will automatically change based on country and version selection.
+                        </p>
+                    </div>
+                    <div class="layout__item eleven-twelfths radioGroup">
+                        <input type="radio" class="radio-input" id="radio-1" name="chartSelection" value="vertBar" onClick="setChart(event)"/>
+                        <label class="radio radioLabel" for="radio-1">
+                            Vertical Bar
+                        </label>
+                        <input type="radio" class="radio-input" id="radio-2" name="chartSelection" value="compBar" onClick="setChart(event)"/>
+                        <label class="radio radioLabel" for="radio-2">
+                            Vertical comparison
+                        </label>
+                        <input type="radio" class="radio-input" id="radio-3" value="horBar" name="chartSelection" onClick="setChart(event)"/>
+                        <label class="radio radioLabel" for="radio-3">
+                            Horizontal Bar
+                        </label>
+                    </div>
+                </div>
+                <div class="layout">
+                    <div class="layout__item one-fifth barsDrop">
+                        <div class="topLabel">
+                            <label class="label" for="select-1">
+                                Number of Bars
+                            </label>
+                        </div>
+                        <div class="select">
+                            <select id="chartNum" name="chartNum" onchange="colSelect()">
+                            </select>
+                        </div>
+                        <div id="btnLoc1">
+                            <button class="btn" onclick="gen()" id="submitButton">
+                                Generate
+                            </button>
+                        </div>
+                    </div>
+                    <div class="layout__item one-sixth">
+                        <div id="perLabel" class="topLabel">
+                        </div>
+                        <div id="heightDiv" class="next">
+                        </div>
+                    </div>
+                    <div class="layout__item one-sixth">
+                        <div id="topDescLabel" class="topLabel">
+                        </div>
+                        <div id="topLabelDiv" class="next">
+                        </div>
+                    </div>
+                    <div class="layout__item one-sixth">
+                        <div id="bottomDescLabel" class="topLabel">
+                        </div>
+                        <div id="bottomLabelDiv" class="next">
+                        </div>
+                    </div>
+                    <div class="layout__item" id="btnLoc2">
+                        <button class="btn" onclick="gen()" id="submitButton">
+                            Generate
+                        </button>
+                    </div>
+                </div>
+                <div class="layout previewNCode">
+                    <div class="layout__item one-half chartResize">
+                        <div class="panel__heading soft--sides soft-small--ends headers" id="livePrev">
+                            <h5 class="flush--bottom">
+                                Live Preview
+                            </h5>
+                        </div>
+                        <div id="print">
+                        </div>
+                    </div>
+                    <div class="layout__item five-twelfths chartResize">
+                        <div class="panel__heading soft--sides soft-small--ends headers" id="codePrev">
+                            <h5 class="flush--bottom">
+                                Code
+                            </h5>
+                        </div>
+                        <div id="fixedHeight">
+                            <code id="code">
+                            </code>
+                        </div>
+                        <div id="copyBtn">
+                            <p class="warning">
+                                For use with chart-specific templates only.
+                            </p>
+                            <button class="btn button example" data-clipboard-target="#code" id="clip" onClick="alertify.notify('Copied!', 'success', 2, function(){  console.log('Clicked'); });">
+                                Copy Code
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src="https://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/alertifyjs/1.7.0/alertify.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.8/clipboard.min.js"></script>
+            <script src="js/charts.js"></script>
+        </body>
+    </html>

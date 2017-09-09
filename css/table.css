@@ -1,0 +1,92 @@
+
+
+
+.tableContent {
+  -webkit-box-sizing: border-box;
+  /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;
+  /* Firefox */
+  box-sizing: border-box;
+  padding-left: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+
+/* code output */
+
+.fixedHeight {
+  height: 300px;
+  overflow: auto;
+}
+
+#code, #cssCode {
+  height: 300px;
+  overflow: auto;
+  font-size: 11px;
+  line-height: 12px;
+  font-family: monospace;
+}
+
+
+/* input styles */
+
+.thLabel {
+  max-width: 230px;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+
+/* layout styles */
+
+.chartbtn {
+  margin-bottom: 20px;
+}
+
+.mobButton,
+h5 {
+  display: inline-block !important;
+  text-align: right;
+}
+
+#codePrev, #livePrev, #buildBtn, #cssPrev, #updateBtn {
+  display: none;
+}
+#updateBtn {
+  margin-bottom: 80px;
+}
+
+iframe {
+  width: 99%;
+  height: 300px;
+}
+
+.mobileDiv {
+  width: 320px !important;
+}
+
+.desktopDiv {
+  width: 99% !important;
+}
+
+.btn-group--small, btn--tiny {
+  margin-bottom: 0 !important;
+  float: right;
+}
+.fRight {
+  float: right;
+}
+.activeF{
+  background-color: #DFDFDF !important;
+}
+.alertify-notifier .ajs-message.ajs-success {
+  color: #11939A !important;
+  border: 3px solid #11939A;
+  background: #ffffff !important;
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0) !important;
+}
+#headlineUpdate {
+  padding-bottom: 10px;
+  display: none;
+}

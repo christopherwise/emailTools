@@ -1,0 +1,63 @@
+# Exclude the Podspecs
+Pods/*
+Podfile.lock
+
+# Exclude any PSD/AI source
+*.psd
+*.psb
+*.ai
+*.zip
+*.sketch
+*.rar
+*.jpg
+*.gif
+*.png
+*.pdf
+*.mov
+*.psb
+*.mp4
+*.jpeg
+
+# Exclude generated files
+VersionX-revision.h
+
+# Exclude the build products
+*.[oa]
+node_modules/
+npm-debug.log
+ 
+# Exclude temp nibs and swap files
+*~.nib
+*.swp
+*~
+
+# Sparkle distribution Private Key (Don't check me in!)
+dsa_priv.pem
+
+# Exclude OS X folder attributes
+*.DS_Store
+.DS_Store
+node_modules
+ 
+# Exclude user-specific XCode 3 and 4 files
+*.mode1
+*.mode1v3
+*.mode2v3
+*.perspective
+*.perspectivev3
+*.pbxuser
+*.xcuserdata
+xcuserdata/
+*/xcuserdata/
+
+# Exclude ReleaseNotes
+RELEASENOTES
+RELEASENOTES.*
+release_notes
+release_notes.*
+
+# Other source repository archive directories (protects when importing)
+.hg
+.svn
+CVS
+

@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title>
+            Collapse Tool
+        </title>
+        <!-- Uber Fonts (Clan Pro) -->
+         <link href="https://d1a3f4spazzrp4.cloudfront.net/uber-fonts/4.0.0/superfine.css" rel="stylesheet"/> 
+        <link href="https://uber-static.s3.amazonaws.com/emails/2016/CSS/superfine.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="../css/nav.css"/>
+        <link rel="stylesheet" href="./css/collapse.css"/>
+        <!-- include the style -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/alertifyjs/1.6.1/css/alertify.min.css"/>
+        <!-- include a theme -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/alertifyjs/1.6.1/css/themes/default.min.css"/>
+        <!-- pop over -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.css"/>
+    </head>
+    <body>
+        <nav class="top-bar top-bar--dark">
+            <div class="content">
+                <a class="top-bar__logo float--left" href="../index.html">
+                    <span class="top-bar__title text-white soft">
+                        Wise
+                    </span>
+                </a>
+                <ul class="top-bar__nav top-bar__nav--left palm-top-bar__nav--stacked ">
+                    <li class="top-bar__item dib">
+                        <div class="navDrop">
+                            <a href="#">
+                                Email Tools
+                            </a>
+                            <div class="items">
+                                <ul>
+                                    <li>
+                                        <a href="./charts.html">
+                                            Charts
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="./tables.html">
+                                            Tables
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="./collapse.html">
+                                            Collapse
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="top-bar__item dib">
+                        <div class="navDrop">
+                            <a href="#">
+                                General Tools
+                            </a>
+                            <div class="items">
+                                <ul>
+                                    <li>
+                                        <a href="./lookup.html">
+                                            City Search
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="./project_namer.html">
+                                            Name Generator
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="content">
+            <div class="layout soft--sides layout--top">
+                <div class="layout__item soft--ends">
+                    <p class="small">
+                        To be used in ExactTarget. Select the number of block you would like. Select the background color. To be used in an alternating color scheme. If your region has low technology adoption and might not understand the arrow is a drop down you can choose to not have the content collapse. Click in the preview to edit. The mobile button will show the collapse preview. When your changes are made, generate the code. Copy and paste into ET. If making another one refresh or your click interaction could control more than one section.
+                        <span class="primary-font--bold">
+                            The drop down will not display in Gmail and will remain in the uncollapsed state due to lack of media query support.
+                        </span>
+                    </p>
+                </div>
+                <div class="layout__item one-sixth portable-one-whole">
+                    <label class="label" for="numSelect">
+                        # of info blocks
+                        <img src="https://s3.amazonaws.com/uber-static/emails/2016/08/info.png" id="moreInfo"/>
+                    </label>
+                    <div class="select">
+                        <select id="numSelect">
+                            <option>
+                                Please Select
+                            </option>
+                            <option value="1">
+                                1
+                            </option>
+                            <option value="2">
+                                2
+                            </option>
+                            <option value="3">
+                                3
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layout__item one-quarter">
+                    <label class="label">
+                        Background color
+                    </label>
+                    <div id="radios">
+                        <input type="radio" class="radio-input" id="radio-1" name="radio-group" value="#ffffff"/>
+                        <label class="radio" for="radio-1">
+                            White
+                        </label>
+                        <input type="radio" class="radio-input" id="radio-2" name="radio-group" value="#f1f1f1"/>
+                        <label class="radio" for="radio-2">
+                            Gray
+                        </label>
+                    </div>
+                    <label class="label">
+                        Collapse
+                    </label>
+                    <div id="radios">
+                        <input type="radio" class="radio-input" id="radio-3" name="collapse-group" value="collapse"/>
+                        <label class="radio" for="radio-3">
+                            Collapse
+                        </label>
+                        <input type="radio" class="radio-input" id="radio-4" name="collapse-group" value="sansCollapse"/>
+                        <label class="radio" for="radio-4">
+                            Don't Collapse
+                        </label>
+                    </div>
+                </div>
+                <div class="layout__item one-sixth portable-one-whole">
+                    <label class="label" for="contentSelect">
+                        Content
+                    </label>
+                    <div class="select">
+                        <select id="contentSelect">
+                            <option value="1">
+                                All text
+                            </option>
+                            <option value="2">
+                                Image and text
+                            </option>
+                        </select>
+                    </div>
+                    <div id="urlValueDiv" class="hide">
+                        <label class="label" for="input-1">
+                            Image url
+                        </label>
+                        <input type="text" class="text-input" value="http://placehold.it/256x150/FF69B4/ffffff" id="urlValue"/>
+                    </div>
+                </div>
+                <div class="layout__item one-eighth soft--sides portable-one-whole soft--ends portable-soft-tiny--ends">
+                    <button class="btn btn--tiny" id="generateButton" onClick="toFrame()">
+                        Generate
+                    </button>
+                </div>
+            </div>
+            <div class="layout previewNCode soft--sides">
+                <div class="layout__item three-quarters portable-push-huge--ends" id="livePrev">
+                    <div class="panel__heading soft--sides headers">
+                        <div class="layout">
+                            <div class="layout__item one-sixth portable-one-whole soft-small--ends portable-soft-tiny--ends">
+                                <h5 class="flush--bottom liveHead">
+                                    Live Preview
+                                </h5>
+                            </div>
+                            <div class="layout__item one-quarter portable-one-whole soft-small--ends">
+                                <a class="btn btn--tiny" id="updateButton" href="#codeSection">
+                                    Generate Code
+                                </a>
+                            </div>
+                            <div class="layout__item two-fifths portable-one-whole soft-small--ends portable-soft-tiny--ends">
+                                <ul class="btn-group btn-group--small mobButton">
+                                    <li class="btn-group__item btn-group__item--small activeF">
+                                        <a class="btn-group__button" id="desktopButton">
+                                            Desktop
+                                        </a>
+                                    </li>
+                                    <li class="btn-group__item btn-group__item--small">
+                                        <a class="btn-group__button" id="mobileButton">
+                                            Mobile
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <iframe id="output" class="liveDiv">
+                    </iframe>
+                </div>
+                <div class="layout__item three-quarters soft--top" id="codeSection">
+                    <div class="panel__heading soft--sides soft-small--ends headers" id="codePrev">
+                        <h5 class="flush--bottom">
+                            Code
+                        </h5>
+                        <button class="btn btn--tiny fRight" id="htmlButton" data-clipboard-target="#code" onClick="alertify.notify('Copied!', 'success', 2);">
+                            copy
+                        </button>
+                    </div>
+                    <div class="fixedHeight">
+                        <code id="code">
+                        </code>
+                    </div>
+                </div>
+                <div class="layout__item one-third soft" id="refresh">
+                    <p>
+                        Creating another? Please refresh or else your interactions will control more than one section!
+                    </p>
+                    <a class="btn btn--primary push--top push--bottom" href="./collapse.html">
+                        Refresh
+                    </a>
+                </div>
+            </div>
+            <footer class="small">
+                <span class="footerArea">
+                    From Growth CRM. Suggestions or questions?
+                    <a href="mailto:wise@uber.com">
+                        @wise
+                    </a>
+                </span>
+            </footer>
+        </div>
+    </div>
+    <!-- popover content -->
+    <div id="myContent" class="hide">
+        <div class="one-whole portable-soft-small flush portable-one-whole soft-large--top display--block">
+            <div class="soft-tiny--bottom">
+                <label class="label" for="addon-4">
+                    Select the number of information blocks you want to include in the top portion.
+                </label>
+            </div>
+        </div>
+        <div class="one-whole portable-soft-small flush portable-one-whole display--block">
+            <img src="https://s3.amazonaws.com/uber-static/emails/2016/08/dropz.gif" id="infogif"/>
+        </div>
+    </div>
+    <!-- alertify -->
+    <script src="https://cdn.jsdelivr.net/alertifyjs/1.6.1/alertify.min.js"></script>
+    <!-- clipboard for oneclick copy -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.8/clipboard.min.js"></script>
+</body>
+<!-- jquery -->
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js'></script>
+<!-- custom js -->
+<script src="./js/collapse.js"></script>
+<!-- popover -->
+<script src="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.js"></script>
+<script type="text/javascript">
+            $('#moreInfo').webuiPopover({url:'#myContent',width:350,height:'auto', closeable:true, animation:'pop',placement:'bottom-right'});
+        </script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-78463824-5', 'auto');
+  ga('send', 'pageview');
+
+</script>
+</body>
+</html>

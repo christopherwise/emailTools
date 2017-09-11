@@ -1,14 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Charts</title>
-	<style>
-		
 
-	</style>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charts</title>
+  <link rel="stylesheet" href="/css/foundation.min.css">
+  <style>
+
+
+  </style>
 </head>
+
 <body>
+  <p>
+  Charts tho
+  </p>
+<label for="chartPicker">Select Chart Type</label>
+<select name="chartPicker" id="chartPicker" onchange="handlers.selectChartType()">
+	<option value="">Please Select an Option</option>
+	<option value="verticalBar">Vertical Bar</option>
+	<option value="verticalComparison">Vertical Comparison</option>
+	<option value="horizontalBar">Horizontal Bar</option>
+</select>
+<br>
+<label for="numberOfBars">Select number of bars</label>
+<select name="numberOfBars" id="numberOfBars" onchange="handlers.selectBars()">
 	
+</select>
+<label for="containerWidth">Insert container width in px</label>
+<input type="number" name="containerWidth" id="containerWidth" placeholder="700" value="700">
+<br>
+<button onclick="handlers.generate()">submit</button>
+<br>
+<button onclick="view.resetActiveChart()">Reset Active</button>
+
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="/js/foundation.min.js"></script>
+  <script src="/js/chartsR.js"></script>
 </body>
+
 </html>

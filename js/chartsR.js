@@ -6,7 +6,8 @@ var model = {
 			type: '',
 			maxCol: 0,
 			numberOfBars: 0,
-			containerWidth: 700
+			containerWidth: 700,
+			chartCode: ''
 		},
 		chartOptions: [{
 			type: "verticalBar",
@@ -26,12 +27,32 @@ var model = {
 		},
 		barWidth: function () {
 			width = this.activeChart.containerWidth;
-			console.log(width);
 			numberOfBars = this.activeChart.numberOfBars;
-			console.log(numberOfBars);
-			barWidth = (width - 28) / numberOfBars;
+			containerWidth = ((width - 28) * .9);
+			var spacers = numberOfBars - 1;
+			var spacerWidth = containerWidth * .1;
+			var barWidth = (containerWidth - (spacerWidth * spacers)) / numberOfBars;
 			barWidth = Math.floor(barWidth);
-			console.log(barWidth);
+			return barWidth;
+		},
+		buildVerticalBar: function () {
+			var start = chartMarkup.chartMarkup.tableStart(this.activeChart.containerWidth);
+			var code = [];
+			var numberOfBars = this.activeChart.numberOfBars;
+			var barWidth = this.barWidth();
+			// for loop for top of chart including top label, actualy chart, and anti height spacer
+			for (var i = 1; i <= numberOfBars; i++) {
+				chartHeight = 50;
+				topDescLabel = 'test';
+				chartHeight = chartHeight * 2;
+				antiHeight = 200 - chartHeight;
+				code.push(chartMarkup.chartMarkup.barChart(barWidth, chartHeight, antiHeight, topDescLabel));
+			}
+			code = code.join(chartMarkup.chartMarkup.chartSeperator());
+			code = start + code;
+			code = code + chartMarkup.chartMarkup.bottomLine;
+			this.activeChart.chartCode = code;
+			console.log(this.activeChart.chartCode);
 		}
 	}
 	//controller
@@ -89,7 +110,9 @@ var view = {
 }
 var chartMarkup = {
 		chartMarkup: {
-			tableStart: '<table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td align="center"> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:700px"> <tr> <td align="center"><table width="90%" height="240" border="0" cellpadding="0" cellspacing="0" class="" style="table-layout:fixed"> <tr>',
+			tableStart: function (width) {
+				return '<table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td align="center"> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:' + width + 'px"> <tr> <td align="center"><table width="90%" height="240" border="0" cellpadding="0" cellspacing="0" class="" style="table-layout:fixed"> <tr>'
+			},
 			horizontalTableStart: '<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border: none; border-collapse: collapse; border-spacing: 0; mso-table-lspace: 0; mso-table-rspace: 0; width: 100%;"> <tr> <td align="center" style="direction: ltr;"> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="border: none; border-collapse: collapse; border-spacing: 0; max-width: 700px; mso-table-lspace: 0; mso-table-rspace: 0; width: 100%;"> <tr> <td align="center" style="direction: ltr;"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="" style="border: none; border-collapse: collapse; border-spacing: 0; mso-table-lspace: 0; mso-table-rspace: 0; table-layout: fixed; width: 100%;"> <tr><td style="direction: ltr;">',
 			tableStop: '</td> </tr> </table></td> </tr> </table> </td> </tr> </table>',
 			bottomLine: '</td> </tr> </table></td> </tr> <tr> <td><table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class=""> <tr> <td height="1" width="100%" bgcolor="#c3c8c9" class="tronHr" style="background-color:#c3c8c9;font-size:1px;line-height:1px">&amp;nbsp;</td> </tr> </table> </td> </tr> </table> </td> </tr> <tr> <td align="center"> <table width="90%" height="20" border="0" cellpadding="0" cellspacing="0" class="" style="table-layout:fixed"> <tr>',

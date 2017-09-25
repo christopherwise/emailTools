@@ -37,8 +37,8 @@ var model = {
 			var barWidth = this.barWidth();
 			// for loop for top of chart including top label, actualy chart, and anti height spacer
 			for (var i = 1; i <= numberOfBars; i++) {
-				chartHeight = 50;
-				topDescLabel = 'test';
+				chartHeight = $('#height' + i).val();
+				topDescLabel = $('#topLabel' + i).val();
 				chartHeight = chartHeight * 2;
 				antiHeight = 200 - chartHeight;
 				codeArray.push(chartMarkup.chartMarkup.barChart(barWidth, chartHeight, antiHeight, topDescLabel));
@@ -47,13 +47,14 @@ var model = {
 			code = chartMarkup.chartMarkup.tableStart(width) + code;
 			code = code + chartMarkup.chartMarkup.bottomLine;
 			codeArray = [];
-			for (var i = 0; i < numberOfBars; i++) {
-				codeArray.push(chartMarkup.chartMarkup.bottomLabels(barWidth, 'test' + [i]));
+			for (var i = 1; i <= numberOfBars; i++) {
+				var botLabel = $('#bottomLabel' + i).val();
+				codeArray.push(chartMarkup.chartMarkup.bottomLabels(barWidth, botLabel));
 			};
 			code += codeArray.join(chartMarkup.chartMarkup.chartSeperator());
 			code = code + chartMarkup.chartMarkup.tableStop;
 			this.activeChart.chartCode = code;
-			console.log(this.activeChart.chartCode);
+			$('#dump').html(this.activeChart.chartCode);
 		}
 	}
 	//controller
@@ -81,6 +82,9 @@ var handlers = {
 		generate: function () {
 			this.setContainerWidth();
 			view.printActiveChart();
+			var inputs = view.chartInputInsert();
+			console.log(inputs);
+			$('#chartInput').html(inputs);
 		}
 	}
 	//view
@@ -102,11 +106,16 @@ var view = {
 	},
 	barOptions: function () {
 		var maxCol = model.activeChart.maxCol;
-		console.log(maxCol);
 		$('#numberOfBars').empty();
+		$('#numberOfBars').append("<option>Please Select</option>");
 		for (var i = 1; i < maxCol; i++) {
 			$('#numberOfBars').append($("<option></option>").attr('value', i + 1).text(i + 1));
 		}
+	},
+	chartInputInsert: function () {
+		var numberOfBars = model.activeChart.numberOfBars;
+		var htmlInputs = chartMarkup.chartMarkup.chartInputs(numberOfBars);
+		return htmlInputs;
 	}
 }
 var chartMarkup = {
@@ -131,9 +140,29 @@ var chartMarkup = {
 			},
 			chartSeperator: function () {
 				return '</td> <td width="10%"><table width="100%" border="0" cellpadding="0" cellspacing="0" > <tr> <td>&nbsp;</td> </tr> </table></td>'
+			},
+			chartInputs: function (numberOfBars) {
+				var inject = "";
+				for (var i = 1; i <= numberOfBars; i++) {
+					inject += '<div class="row chartInputRow"><div class="col"><label for="height' + i + '">Percentage Chart ' + i + '</label><br><input type="number" name="percentage" id="height' + i + '" placeholder="percentage" value="" min="1" max="100"></div><div class="col"><label for="topLabel1">Top label bar ' + i + '</label><br><input type="text" name="percentage" id="topLabel' + i + '" placeholder="Top Label" value=""></div><div class="col"><label for="bottomLabel' + i + '">Bottom label bar ' + i + '</label><br><input type="text" name="percentage" id="bottomLabel' + i + '" placeholder="Bottom Label" value=""></div></div>'
+				}
+				return inject;
 			}
 		}
 	}
-	// add in markup for the actual graphs
-	// create inputs for graph height as well as labels
-	// build frontend ui
+	//  event listenrs
+	//Check percentage inputs if over 100
+$('#chartInput').on('keyup', '[id^=height]', function () {
+	var numberOfBars = model.activeChart.numberOfBars;
+	for (var i = 1; i <= numberOfBars; i++) {
+		var perc = $('#height' + i);
+		var percVal = perc.val();
+		if (percVal > 100) {
+			console.log('Invalid number. Please enter a number between 1 and 100');
+			perc.val('');
+			console.log(percVal);
+		}
+	}
+});
+// add in markup for the actual graphs
+// build frontend ui

@@ -8,38 +8,29 @@
   padding-bottom: 10px;
   padding-top: 10px; }
 
-/* slider */
-.volume {
-  width: 250px;
-  height: 30px;
-  position: absolute;
-  cursor: pointer;
-  background: #444;
-  top: 50%;
-  left: 50%;
-  margin-left: -125px;
-  margin-top: -15px;
-  box-shadow: inset 0 0 15px #000; }
-  .volume .vol-box {
-    font-size: 14px;
-    display: block;
-    text-align: center;
-    margin-top: 50px; }
-  .volume .control {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 125px;
-    height: 30px;
-    background: #3498db;
-    box-shadow: inset 0 0 2px #000; }
-    .volume .control .knob {
-      position: absolute;
-      top: 0;
-      right: -5px;
-      height: 30px;
-      width: 10px;
-      background: #FFF;
-      box-shadow: 0 0 1px #000; }
+#live {
+  width: 100%;
+  height: 400px; }
+
+.topCol {
+  padding-top: 4em; }
+
+.hide {
+  display: none; }
+
+.show {
+  display: block; }
+
+#alerts-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 75%;
+  max-width: 800px;
+  margin: 0 auto; }
+
+.alert {
+  margin: 0 auto; }
 
 /*# sourceMappingURL=app.css.map */

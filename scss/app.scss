@@ -1,3 +1,13 @@
+// Variables
+$gap-xs: 5px;
+$gap-sm: 10px;
+$gap:    20px;
+$gap-md: 30px;
+$gap-lg: 40px;
+
+$bg-color: #868e96;
+$panel-icon-size: 18px;
+
 
 .chartInputRow:nth-child(even){
   background-color: #fff;
@@ -14,10 +24,38 @@
 	height: 400px;
 }
 //positioning
-.topCol {
+.topRow {
 	padding-top: 4em;
 }
-
+.inputCol {
+	margin: 0 auto;
+}
+//styling 
+.topCol {
+	border: 2px solid gray;
+	padding: 10px;
+	background-color: #f1f1f1;
+}
+.dblock {
+	display:block;
+}
+.code {
+	width: 100%;
+	font-size: 8px;
+	line-height: 12px;
+	font-family: monospace;
+	height: 10em;
+}
+label {
+	padding-top: 5px;
+}
+button {
+	margin-top:15px;
+	margin-bottom:15px;
+}
+input, #colorPicker {
+	width:50%;
+}
 //show and hide
 .hide {
 	display: none;
@@ -37,4 +75,46 @@
 }
 .alert {
     margin: 0 auto;
+}
+// collapseable settings
+.panel-brand {
+  .panel-heading {
+    padding:0;
+    border-radius: .25 rem;
+  }
+  .panel-title {
+    background:$bg-color;
+    display:flex;
+    padding:$gap $gap-sm;
+    color:white;
+    font-size:14px;
+    text-transform:uppercase;
+    border-radius: .25 rem;
+    &:hover,&:focus,&:active {
+      background:darken($bg-color,5%);
+      text-decoration:none;
+    }
+    &:active {
+      background:darken($bg-color,10%);
+      text-decoration:none;
+    }
+    &:after {
+      transition:all 0.2s;
+      content:"";
+      background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPjxzdmcgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiPjxnIGlkPSJpY29tb29uLWlnbm9yZSI+PC9nPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik01MTIgMTc2bC0zMi0zMi0yMjQgMjI0LTIyNC0yMjQtMzIgMzIgMjU1Ljk5OSAyNTYgMjU2LjAwMS0yNTZ6Ij48L3BhdGg+PC9zdmc+);
+      width: $panel-icon-size;
+      height: $panel-icon-size;
+      z-index: 5;
+      position: relative;
+      color: white;
+      background-size: $panel-icon-size;
+      margin-left: auto;
+    }
+    &:not(.collapsed) {
+      background:darken($bg-color,15%);
+      &:after {
+        transform:rotate(180deg);
+      }
+    }
+  }
 }

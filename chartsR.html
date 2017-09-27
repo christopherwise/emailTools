@@ -17,11 +17,10 @@
 
 <body>
   <div class="container">
-  	<div id="alerts-container"></div>
-    <div class="row">
-
-      <div class="col topCol">
-        <label for="chartPicker">Select Chart Type</label>
+    <div id="alerts-container"></div>
+    <div class="row topRow">
+      <div class="col-md-6 topCol">
+        <label for="chartPicker" class="dblock">Select Chart Type</label>
         <select name="chartPicker" id="chartPicker" onchange="handlers.selectChartType()">
           <option value="">Please Select an Option</option>
           <option value="verticalBar">Vertical Bar</option>
@@ -29,23 +28,22 @@
           <option value="horizontalBar">Horizontal Bar</option>
         </select>
         <br>
-        <label for="numberOfBars">Select number of bars</label>
+        <label for="numberOfBars" class="dblock">Select number of bars</label>
         <select name="numberOfBars" id="numberOfBars" onchange="handlers.selectBars()">
         </select>
-        <label for="containerWidth">Insert container width in px</label>
+        <label for="containerWidth" class="dblock">Insert container width in px</label>
         <input type="number" name="containerWidth" id="containerWidth" placeholder="700" value="700">
-        <br>
+        <label for="colorPicker" class="dblock">Select chart color</label>
         <div id="colorPicker" class="input-group colorpicker-component">
           <input type="text" id="colorPickerId" value="#00AABB" class="form-control" />
           <span class="input-group-addon"><i></i></span>
         </div>
-        <br>
-        <button class="btn btn-primary" onclick="handlers.generate()">submit</button>
+        <button class="btn btn-primary" id="col1Submit" onclick="handlers.generate()">submit</button>
       </div>
-      <div class="col topCol">
+      <div class="col-md-6 topCol">
         <div class="hide inputCol">
           <!-- row of inputs for chart -->
-          <div class="container" id="chartInput">
+          <div class="container align-middle" id="chartInput">
           </div>
           <button class="btn btn-secondary" onclick="model.buildVerticalBar()">Build</button>
         </div>
@@ -55,7 +53,28 @@
       <div class="col hide liveCol pt-5">
         <iframe id="live"></iframe>
         <br>
-        <textarea id="dump" style="width: 100%; height: 60%; font-size: 8px;"></textarea>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="panel-group panel-brand" id="accordion" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading" id="headingOne" role="tab"><a class="panel-title collapsed collapse1" role="button" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">CSS</a></div>
+                 <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                  <div class="panel-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="panel-group panel-brand" id="accordion" role="tablist" aria-multiselectable="true">
+              <div class="panel panel-default">
+                <div class="panel-heading" id="headingTwo" role="tab"><a class="panel-title collapsed colapse2" role="button" data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">HTML</a></div>
+                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                  <div class="panel-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

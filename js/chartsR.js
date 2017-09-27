@@ -31,6 +31,7 @@ var model = {
 			return barWidth;
 		},
 		buildVerticalBar: function () {
+			handlers.updateGenerate();
 			var width = this.activeChart.containerWidth;
 			var codeArray = [];
 			var code = '';
@@ -88,6 +89,7 @@ var handlers = {
 		selectBars: function () {
 			var numberOfBars = $('#numberOfBars').val();
 			model.activeChart.numberOfBars = numberOfBars;
+			this.updateGenerate();
 		},
 		setContainerWidth: function () {
 			var width = $('#containerWidth').val();
@@ -96,20 +98,34 @@ var handlers = {
 		selectColor: function () {
 			var color = $('#colorPickerId').val();
 			model.activeChart.chartColor = color;
+			$('.panel-title').css("background-color", color);
 		},
 		generate: function () {
 			var empty = view.printActiveChart();
 			if (empty === true) {
 				this.setContainerWidth();
 				this.selectColor();
-				view.printActiveChart();
 				var numberOfBars = $('.chartInputRow div').length;
-				console.log(numberOfBars);
 				if (model.activeChart.numberOfBars == numberOfBars) {} else {
 					var inputs = view.chartInputInsert();
 				}
 				$('.inputCol').removeClass('hide');
+				$('#col1Submit').addClass('hide');
 				$('#chartInput').html(inputs);
+			} else {
+				view.alert("Make sure to fill out all inputs!", "danger", 2000);
+			}
+		},
+		updateGenerate: function () {
+			var empty = view.printActiveChart();
+			if (empty === true) {
+				this.setContainerWidth();
+				this.selectColor();
+				var numberOfBars = $('.chartInputRow div').length;
+				if (model.activeChart.numberOfBars == numberOfBars) {} else {
+					var inputs = view.chartInputInsert();
+					$('#chartInput').html(inputs);
+				}
 			} else {
 				view.alert("Make sure to fill out all inputs!", "danger", 2000);
 			}
@@ -122,7 +138,6 @@ var view = {
 			console.log('No chart selected!');
 			return false;
 		} else {
-			console.log('The chart selected is ' + model.activeChart.type + ' and it has ' + model.activeChart.maxCol + ' max columns. The entered container width is ' + model.activeChart.containerWidth + '.');
 			return true;
 		}
 	},
@@ -184,9 +199,9 @@ var chartMarkup = {
 				return '</td> <td width="10%"><table width="100%" border="0" cellpadding="0" cellspacing="0" > <tr> <td>&nbsp;</td> </tr> </table></td>'
 			},
 			chartInputs: function (numberOfBars) {
-				var inject = "";
+				var inject = "<p>Enter a value for each chart between 1 and 100. This will corespond to the height of the chart.";
 				for (var i = 1; i <= numberOfBars; i++) {
-					inject += '<div class="row chartInputRow"><div class="col"><label for="height' + i + '">Percentage Chart ' + i + '</label><br><input type="number" name="percentage" id="height' + i + '" placeholder="percentage" value="" min="1" max="100"></div></div>'
+					inject += '<div class="row chartInputRow"><div class="col inputCol"><span>Bar # ' + i + ' </span><input type="number" name="percentage" id="height' + i + '" placeholder="Enter bar height" value="" min="1" max="100"></div></div>'
 				}
 				return inject;
 			}

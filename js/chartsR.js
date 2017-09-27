@@ -21,40 +21,53 @@ var model = {
 			maxCol: 5
 		}],
 		barWidth: function () {
+			// get Container width from active chart object
 			width = this.activeChart.containerWidth;
+			//set number of bars from active chart object
 			numberOfBars = this.activeChart.numberOfBars;
+			// calculations for bar size
 			containerWidth = ((width) * .9);
 			var spacers = numberOfBars - 1;
 			var spacerWidth = containerWidth * .1;
 			var barWidth = (containerWidth - (spacerWidth * spacers)) / numberOfBars;
 			barWidth = Math.floor(barWidth);
+			//return final width
 			return barWidth;
 		},
 		buildVerticalBar: function () {
-			handlers.updateGenerate();
+			// on build, get latest input values
+			handlers.getInputDataFromUi();
+			// get data from active chart object
 			var width = this.activeChart.containerWidth;
+			var numberOfBars = this.activeChart.numberOfBars;
+			var chartColor = this.activeChart.chartColor;
+			var barWidth = this.barWidth();
 			var codeArray = [];
 			var code = '';
-			var numberOfBars = this.activeChart.numberOfBars;
-			var barWidth = this.barWidth();
-			var topDescLabel = 'type here top!'
-			var chartColor = this.activeChart.chartColor;
-			// for loop for top of chart including top label, actualy chart, and anti height spacer
+			var topDescLabel = 'type here!'
+				// for loop for top of chart including top label, bars, and anti bar spacer
 			for (var i = 1; i <= numberOfBars; i++) {
 				chartHeight = $('#height' + i).val() * 2;
 				antiHeight = 200 - chartHeight;
 				codeArray.push(chartMarkup.chartMarkup.barChart(barWidth, chartHeight, antiHeight, chartColor, topDescLabel));
 			};
+			// put a 10% spacer inbetween each bar
 			code = codeArray.join(chartMarkup.chartMarkup.chartSeperator());
+			// add table opening to top of chart
 			code = chartMarkup.chartMarkup.tableStart(width) + code;
+			// add bottom line
 			code = code + chartMarkup.chartMarkup.bottomLine;
 			codeArray = [];
+			//build bottom labels
 			for (var i = 1; i <= numberOfBars; i++) {
 				var botLabel = 'type here!'
 				codeArray.push(chartMarkup.chartMarkup.bottomLabels(barWidth, botLabel));
 			};
+			// put a 10% spacer inbetween each label
 			code += codeArray.join(chartMarkup.chartMarkup.chartSeperator());
+			//close table
 			code = code + chartMarkup.chartMarkup.tableStop;
+			// add code to active chart data object
 			this.activeChart.chartCode = code;
 			$('#dump').html(this.activeChart.chartCode);
 			//output to iframe
@@ -62,62 +75,68 @@ var model = {
 			doc.open();
 			doc.write(this.activeChart.chartCode);
 			doc.close();
+			// show live preview
 			$('.liveCol').removeClass('hide');
 			view.alert("Click the labels to edit! The code will automatically update.", "success", 5000);
 		},
 		update: function () {
+			// remove content editable tags before printing final code
 			var finalCode = $('#live').contents().find('body').html();
-			finalCode = model.replaceAll(finalCode, 'contenteditable=""', '')
+			finalCode = model.replaceAll(finalCode, 'contenteditable=""', '');
+			// output to page
 			$('#dump').html(finalCode);
 		},
 		replaceAll: function (str, find, replace) {
+			// regex function
 			return str.replace(new RegExp(find, 'g'), replace);
 		}
 	}
 	//controller
 var handlers = {
 		selectChartType: function () {
+			// get chart selection from front end
 			var chartSelection = $('#chartPicker').val();
+			// get max number of charts from data object and set that value as max cols in data object
 			var result = model.chartOptions.filter(function (obj) {
 				return obj.type == chartSelection;
 			})
 			model.activeChart.type = result[0].type;
 			model.activeChart.maxCol = result[0].maxCol;
-			view.printActiveChart();
+			view.checkSelectionsEmpty();
+			// add height input to page
 			view.barOptions();
 		},
 		selectBars: function () {
+			// get number of bars from UI and write back to data object
 			var numberOfBars = $('#numberOfBars').val();
 			model.activeChart.numberOfBars = numberOfBars;
-			this.updateGenerate();
+			//write back all inputs to data object
+			this.getInputDataFromUi();
 		},
 		setContainerWidth: function () {
+			// get container width values and write back to data object
 			var width = $('#containerWidth').val();
 			model.activeChart.containerWidth = width;
 		},
 		selectColor: function () {
+			// get chart color and write back to data object
 			var color = $('#colorPickerId').val();
 			model.activeChart.chartColor = color;
+			// for fun make background color of code dropdowns same color as chart
+			// might remove this later. Haven't decided.
 			$('.panel-title').css("background-color", color);
 		},
 		generate: function () {
-			var empty = view.printActiveChart();
-			if (empty === true) {
-				this.setContainerWidth();
-				this.selectColor();
-				var numberOfBars = $('.chartInputRow div').length;
-				if (model.activeChart.numberOfBars == numberOfBars) {} else {
-					var inputs = view.chartInputInsert();
-				}
-				$('.inputCol').removeClass('hide');
-				$('#col1Submit').addClass('hide');
-				$('#chartInput').html(inputs);
-			} else {
-				view.alert("Make sure to fill out all inputs!", "danger", 2000);
-			}
+			// get all inputs and send to
+			this.getInputDataFromUi();
+			// Show second column of inputs
+			$('.inputCol').removeClass('hide');
+			// remove submit button to reduce confusion
+			$('#col1Submit').addClass('hide');
 		},
-		updateGenerate: function () {
-			var empty = view.printActiveChart();
+		getInputDataFromUi: function () {
+			// run methods to get all inputs and write back to data source
+			var empty = view.checkSelectionsEmpty();
 			if (empty === true) {
 				this.setContainerWidth();
 				this.selectColor();
@@ -133,7 +152,8 @@ var handlers = {
 	}
 	//view
 var view = {
-	printActiveChart: function () {
+	checkSelectionsEmpty: function () {
+		// check if selections have been made
 		if (model.activeChart.type == '' || model.activeChart.numberOfBars === 0) {
 			console.log('No chart selected!');
 			return false;
@@ -146,10 +166,11 @@ var view = {
 		model.activeChart.maxCol = 0;
 		model.activeChart.numberOfBars = 0;
 		model.activeChart.containerWidth = 0;
-		this.printActiveChart();
+		this.checkSelectionsEmpty();
 		$('#chartPicker').val('');
 	},*/
 	barOptions: function () {
+		// dynamically add options to UI for number of bars based on chart selection
 		var maxCol = model.activeChart.maxCol;
 		$('#numberOfBars').empty();
 		$('#numberOfBars').append("<option>Please Select</option>");
@@ -158,12 +179,13 @@ var view = {
 		}
 	},
 	chartInputInsert: function () {
+		// dynamically place inputs for height of chart based on number of bars selected
 		var numberOfBars = model.activeChart.numberOfBars;
 		var htmlInputs = chartMarkup.chartMarkup.chartInputs(numberOfBars);
 		return htmlInputs;
 	},
 	alert: function (message, type, closeDelay) {
-		// default to alert-info; other options include success, warning, danger
+		// function to  display alerts at the top of the page based on user input
 		type = type || "info";
 		// create the alert div
 		var alert = $('<div class="alert alert-' + type + ' role="alert">').append($('<button type="button" class="close" data-dismiss="alert">').append("&times;")).append(message);
@@ -176,6 +198,7 @@ var view = {
 	}
 }
 var chartMarkup = {
+		// Object holding all markup required to create the tables
 		chartMarkup: {
 			tableStart: function (width) {
 				return '<table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td align="center"> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:' + width + 'px"> <tr> <td align="center"><table width="90%" height="240" border="0" cellpadding="0" cellspacing="0" class="" style="table-layout:fixed"> <tr>'
@@ -207,7 +230,7 @@ var chartMarkup = {
 			}
 		}
 	}
-	//  event listenrs
+	/* -- event listenrs -- */
 	//Check percentage inputs if over 100
 $('#chartInput').on('keyup', '[id^=height]', function () {
 	var numberOfBars = model.activeChart.numberOfBars;
@@ -221,7 +244,7 @@ $('#chartInput').on('keyup', '[id^=height]', function () {
 		}
 	}
 });
-//monitor keystrokes and auto update code when typing
+//monitor keystrokes and auto update code when typing labels
 $('#live').on('load', function () {
 	$(this).contents().find('table').one('click', '[class^=label]', function (e) {
 		$(this).html('');
@@ -234,5 +257,3 @@ $('#live').on('load', function () {
 $(function () {
 	$('#colorPicker').colorpicker();
 });
-// add in markup for the actual graphs
-// build frontend ui

@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="/css/bootstrap-colorpicker.min.css">
   <link rel="stylesheet" href="/css/app.css">
+  <link href="https://fonts.googleapis.com/css?family=Catamaran|Open+Sans" rel="stylesheet">
   <style>
 
 
@@ -20,60 +21,55 @@
     <div id="alerts-container"></div>
     <div class="row topRow">
       <div class="col-md-6 topCol">
-        <label for="chartPicker" class="dblock">Select Chart Type</label>
-        <select name="chartPicker" id="chartPicker" onchange="handlers.selectChartType()">
-          <option value="">Please Select an Option</option>
-          <option value="verticalBar">Vertical Bar</option>
-          <option value="verticalComparison">Vertical Comparison</option>
-          <option value="horizontalBar">Horizontal Bar</option>
-        </select>
-        <br>
-        <label for="numberOfBars" class="dblock">Select number of bars</label>
-        <select name="numberOfBars" id="numberOfBars" onchange="handlers.selectBars()">
-        </select>
-        <label for="containerWidth" class="dblock">Insert container width in px</label>
-        <input type="number" name="containerWidth" id="containerWidth" placeholder="700" value="700">
-        <label for="colorPicker" class="dblock">Select chart color</label>
-        <div id="colorPicker" class="input-group colorpicker-component">
-          <input type="text" id="colorPickerId" value="#00AABB" class="form-control" />
-          <span class="input-group-addon"><i></i></span>
+        <div class="colSpace">
+          <label for="chartPicker" class="dblock">Select Chart Type</label>
+          <select name="chartPicker" id="chartPicker" onchange="handlers.selectChartType()">
+            <option value="">Please Select an Option</option>
+            <option value="verticalBar">Vertical Bar</option>
+            <option value="verticalComparison">Vertical Comparison</option>
+            <option value="horizontalBar">Horizontal Bar</option>
+          </select>
+          <br>
+          <label for="numberOfBars" class="dblock">Select number of bars</label>
+          <select name="numberOfBars" id="numberOfBars" onchange="handlers.selectBars()">
+          </select>
+          <label for="containerWidth" class="dblock">Insert container width in px</label>
+          <input type="number" name="containerWidth" id="containerWidth" placeholder="700" value="700">
+          <label for="colorPicker" class="dblock">Select chart color</label>
+          <div id="colorPicker" class="input-group colorpicker-component">
+            <input type="text" id="colorPickerId" value="#00AABB" class="form-control" />
+            <span class="input-group-addon"><i></i></span>
+          </div>
+          <p class="smallText pt-1">Due to poor client support for RGBA values, the tool will automatically convert to hex.</p>
+          <button class="btn btn-primary" id="col1Submit" onclick="handlers.generate()">submit</button>
         </div>
-        <button class="btn btn-primary" id="col1Submit" onclick="handlers.generate()">submit</button>
       </div>
-      <div class="col-md-6 topCol">
-        <div class="hide inputCol">
+      <div class="col-md-6 topCol hide inputCol" id="inputCol">
+        <div class="colSpace">
           <!-- row of inputs for chart -->
           <div class="container align-middle" id="chartInput">
           </div>
-          <button class="btn btn-secondary" onclick="model.buildVerticalBar()">Build</button>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col hide liveCol pt-5">
+<div class="col-md-6 buildCell text-center pt-2 hide"> <button class="btn btn-info buildBtn" onclick="model.build()">Build</button>
+</div>
+    </div>
+    <div class="row">
+      <div class="col hide liveCol pt-2 pb-5" id="liveCol">
         <iframe id="live"></iframe>
         <br>
         <div class="row">
-          <div class="col-md-6">
-            <div class="panel-group panel-brand" id="accordion" role="tablist" aria-multiselectable="true">
-              <div class="panel panel-default">
-                <div class="panel-heading" id="headingOne" role="tab"><a class="panel-title collapsed collapse1" role="button" data-toggle="collapse" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">CSS</a></div>
-                 <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                  <div class="panel-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
-                </div>
-              </div>
-            </div>
+          <div class="col-md-6"> 
+             <div class="panelHead">CSS <button type="button" class="btn btn-outline-primary copyBtn cssCopy" data-clipboard-target="#cssCode">copy</button></div>
+                  <div class="codeBlock" id="cssCode">.bar{-moz-animation:animate-bar 3s linear;-webkit-animation:animate-bar 3s linear;-ms-animation:animate-bar 3s linear;-o-animation:animate-bar 3s linear;animation:animate-bar 3s linear}@-moz-keyframes animate-bar{0%{width:0}}@-webkit-keyframes animate-bar{0%{width:0}}@-ms-keyframes animate-bar{0%{width:0}}@-o-keyframes animate-bar{0%{width:0}}@keyframes animate-bar{0%{width:0}}.animate{-webkit-animation:animate-height;-moz-animation:animate-height;animation:animate-height;animation-duration:3s;-webkit-animation-duration:3s;-moz-animation-duration:3s;animation-fill-mode:forwards;-webkit-animation-fill-mode:forwards}@-webkit-keyframes animate-height{0%{height:0}100%{visibility:visible}}@-moz-keyframes animate-height{0%{height:0}100%{visibility:visible}}@keyframes animate-height{0%{height:0}100%{visibility:visible}}</div>
+              
           </div>
           <div class="col-md-6">
-            <div class="panel-group panel-brand" id="accordion" role="tablist" aria-multiselectable="true">
-              <div class="panel panel-default">
-                <div class="panel-heading" id="headingTwo" role="tab"><a class="panel-title collapsed colapse2" role="button" data-toggle="collapse" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">HTML</a></div>
-                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                  <div class="panel-body">Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.</div>
-                </div>
-              </div>
-            </div>
-          </div>
+            <div class="panelHead">HTML <button type="button" class="btn btn-outline-primary copyBtn htmlCopy" data-clipboard-target="#dump">copy</button></div>
+                  <div class="codeBlock" id="dump"></div>
+               
         </div>
       </div>
     </div>
@@ -82,7 +78,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
   <script type="text/javascript" src="/js/bootstrap-colorpicker.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.8/clipboard.min.js"></script>
   <script type="text/javascript" src="/js/chartsR.js"></script>
+
 </body>
 
 </html>

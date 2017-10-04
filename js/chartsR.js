@@ -43,7 +43,7 @@ var model = {
 				this.buildHorizontalBar();
 			}
 		},
-		buildBottom: function(codeArray) {
+		buildBottom: function (codeArray) {
 			var code = '';
 			var barWidth = this.barWidth();
 			// put a 10% spacer inbetween each bar
@@ -65,7 +65,7 @@ var model = {
 			// add code to active chart data object
 			this.activeChart.chartCode = code;
 			var finalCode = this.activeChart.chartCode;
-			finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable/g, '');;
+			finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable=\"\"/g, '');;
 			$('#dump').html(finalCode);
 			//output to iframe
 			var doc = document.getElementById('live').contentWindow.document;
@@ -74,7 +74,7 @@ var model = {
 			doc.close();
 			var $head = $("#live").contents().find("head");
 			$head.append($("<style>" + chartMarkup.chartMarkup.cssCode + "</style>"));
-				// show live preview
+			// show live preview
 			$('.liveCol').removeClass('hide');
 			view.alert("Click the labels to edit! The code will automatically update.", "success", 5000);
 			view.jump('liveCol');
@@ -96,7 +96,6 @@ var model = {
 				codeArray.push(chartMarkup.chartMarkup.barChart(barWidth, chartHeight, antiHeight, chartColor, topDescLabel));
 			};
 			this.buildBottom(codeArray);
-			
 		},
 		buildVerticalCompare: function () {
 			// on build, get latest input values
@@ -117,10 +116,45 @@ var model = {
 			};
 			this.buildBottom(codeArray);
 		},
+		buildHorizontalBar: function () {
+			// on build, get latest input values
+			handlers.getInputDataFromUi();
+			var numberOfBars = this.activeChart.numberOfBars;
+			var chartColor = this.activeChart.chartColor;
+			var barWidth = this.barWidth();
+			var width = model.activeChart.containerWidth;
+			var codeArray = [];
+			var code = chartMarkup.chartMarkup.horizontalTableStart(width);
+			var bottomLabel = 'type here!'
+			var topLabel = '$xx'
+				// for loop for top of chart including top label, bars, and anti bar spacer
+			for (var i = 1; i <= numberOfBars; i++) {
+				percentage = $('#height' + i).val();
+				codeArray.push(chartMarkup.chartMarkup.horizontalChart(percentage, bottomLabel, topLabel, chartColor));
+			};
+			code += codeArray.join('');
+			code += chartMarkup.chartMarkup.tableStop;
+			// add code to active chart data object
+			this.activeChart.chartCode = code;
+			var finalCode = this.activeChart.chartCode;
+			finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable/g, '');;
+			$('#dump').html(finalCode);
+			//output to iframe
+			var doc = document.getElementById('live').contentWindow.document;
+			doc.open();
+			doc.write(this.activeChart.chartCode);
+			doc.close();
+			var $head = $("#live").contents().find("head");
+			$head.append($("<style>" + chartMarkup.chartMarkup.cssCode + "</style>"));
+			// show live preview
+			$('.liveCol').removeClass('hide');
+			view.alert("Click the labels to edit! The code will automatically update.", "success", 5000);
+			view.jump('liveCol');
+		},
 		update: function () {
 			// remove content editable tags before printing final code
 			var finalCode = $('#live').contents().find('body').html();
-			finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable/g, '');
+			finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable=\"\"/g, '');
 			// output to page
 			$('#dump').html(finalCode);
 		},
@@ -219,11 +253,11 @@ var view = {
 	chartInputInsert: function () {
 		// dynamically place inputs for height of chart based on number of bars selected
 		var numberOfBars = model.activeChart.numberOfBars;
-		if (model.activeChart.type === 'verticalBar') {
-		var htmlInputs = chartMarkup.chartMarkup.chartInputs(numberOfBars);
-	} else if (model.activeChart.type === 'verticalComparison') {
-		var htmlInputs = chartMarkup.chartMarkup.chartInputsCompare(numberOfBars);
-	}
+		if (model.activeChart.type === 'verticalBar' || model.activeChart.type === 'horizontalBar') {
+			var htmlInputs = chartMarkup.chartMarkup.chartInputs(numberOfBars);
+		} else if (model.activeChart.type === 'verticalComparison') {
+			var htmlInputs = chartMarkup.chartMarkup.chartInputsCompare(numberOfBars);
+		}
 		return htmlInputs;
 	},
 	alert: function (message, type, closeDelay) {
@@ -248,19 +282,21 @@ var chartMarkup = {
 		// Object holding all markup required to create the tables
 		chartMarkup: {
 			tableStart: function (width) {
-				return '<table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td align="center"> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:' + width + 'px"> <tr> <td align="center"><table width="90%" height="240" border="0" cellpadding="0" cellspacing="0" class="" style="table-layout:fixed"> <tr>'
+				return '<table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td align="center"> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:' + width + 'px"> <tr> <td align="center"><table width="90%" height="240" border="0" cellpadding="0" cellspacing="0" class="wrap90" style="table-layout:fixed"> <tr>'
 			},
-			horizontalTableStart: '<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border: none; border-collapse: collapse; border-spacing: 0; mso-table-lspace: 0; mso-table-rspace: 0; width: 100%;"> <tr> <td align="center" style="direction: ltr;"> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="border: none; border-collapse: collapse; border-spacing: 0; max-width: 700px; mso-table-lspace: 0; mso-table-rspace: 0; width: 100%;"> <tr> <td align="center" style="direction: ltr;"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="" style="border: none; border-collapse: collapse; border-spacing: 0; mso-table-lspace: 0; mso-table-rspace: 0; table-layout: fixed; width: 100%;"> <tr><td style="direction: ltr;">',
+			horizontalTableStart: function (width) {
+				return '<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border: none; border-collapse: collapse; border-spacing: 0; mso-table-lspace: 0; mso-table-rspace: 0; width: 100%;"> <tr> <td align="center" style="direction: ltr;"> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="border: none; border-collapse: collapse; border-spacing: 0; max-width: ' + width + 'px; mso-table-lspace: 0; mso-table-rspace: 0; width: 100%;"> <tr> <td align="center" style="direction: ltr;"><table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="" style="border: none; border-collapse: collapse; border-spacing: 0; mso-table-lspace: 0; mso-table-rspace: 0; table-layout: fixed; width: 100%;"> <tr><td style="direction: ltr;">'
+			},
 			tableStop: '</td> </tr> </table></td> </tr> </table> </td> </tr> </table>',
 			bottomLine: '</td> </tr> </table></td> </tr> <tr> <td><table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class=""> <tr> <td height="1" width="100%" bgcolor="#c3c8c9" class="tronHr" style="background-color:#c3c8c9;font-size:1px;line-height:1px">&amp;nbsp;</td> </tr> </table> </td> </tr> </table> </td> </tr> <tr> <td align="center"> <table width="90%" height="20" border="0" cellpadding="0" cellspacing="0" class="" style="table-layout:fixed"> <tr>',
 			barChart: function (barWidth, height, antiheight, chartColor, topLabel) {
 				return '<td valign="bottom"><!--[if (gte mso 9)|(IE)]> <table width="' + barWidth + '" align="center" cellpadding="0" cellspacing="0" border="0"> <tr> <td> <![endif]--> <table width="100%" border="0" cellpadding="0" cellspacing="0"  style="max-width:' + barWidth + 'px" align="center"> <tr> <td valign="bottom" align="center"><table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td height="' + antiheight + '" style="font-size:0px; line-height:0px;">&nbsp;</td> </tr> </table> <table width="100%" cellpadding="0" cellspacing="0" border="0"> <tr> <td align="left" valign="bottom"><table width="100%" cellpadding="0" cellspacing="0" border="0" class="chartWidth" style="width:100%"> <tr> <td align="center" class="label" style="color: #717172; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 28px; text-align:left;" contenteditable>' + topLabel + '</td> </tr> <tr> <td height="9" style="font-size:1px;line-height:1px">&nbsp;</td> </tr> <tr> <td height="' + height + '" class="animate" style="font-size:0px; line-height:0px; background-color:' + chartColor + ';" bgcolor="' + chartColor + '">&amp;nbsp;</td> </tr></table></td> </tr> </table></td> </tr> </table> <!--[if (gte mso 9)|(IE)]> </td> </tr> </table> <![endif]-->'
 			},
 			verticalComparisonChart: function (barWidth, height1, height2, antiheight1, antiheight2, topLabel1, topLabel2, chartColor) {
-				return '<td valign="bottom"><!--[if (gte mso 9)|(IE)]> <table width="' + barWidth + '" align="center" cellpadding="0" cellspacing="0" border="0"> <tr> <td> <![endif]--> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:' + barWidth + 'px" align="center"> <tr> <td valign="bottom" align="center" width="50%" style="width:50%"> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%" align="left"> <tr> <td> <table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td height="' + antiheight1 + '" style="font-size:0px; line-height:0px;">&nbsp;</td> </tr> </table> <table width="100%" cellpadding="0" cellspacing="0" border="0"> <tr> <td align="left" valign="bottom"><table width="100%" cellpadding="0" cellspacing="0" border="0" class="chartWidth" style="width:100%"> <tr> <td align="center" class="label" style="color: #717172; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 28px; text-align:left; padding-left:3px;" contenteditable>' + topLabel1 + '</td> </tr> <tr> <td height="7" style="font-size:1px;line-height:1px"></td> </tr> <tr> <td height="' + height1 + '" class="animate" style="font-size:0;line-height:0;background-color:' + chartColor +';" bgcolor="' + chartColor +'">&amp;nbsp;</td> </tr> </table></td> </tr> </table> </td> </tr> </table></td><td valign="bottom" align="center" width="50%" style="width:50%"><table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%" align="left"> <tr> <td> <table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td height="' + antiheight2 + '" style="font-size:0px; line-height:0px;">&nbsp;</td> </tr> </table> <table width="100%" cellpadding="0" cellspacing="0" border="0"> <tr> <td align="left" valign="bottom"><table width="100%" cellpadding="0" cellspacing="0" border="0" class="chartWidth" style="width:100%"> <tr> <td align="center" class="label" style="color: #717172; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 28px; text-align:left; padding-left:3px;" contenteditable>' + topLabel2 + '</td> </tr> <tr> <td height="7" style="font-size:1px;line-height:1px"></td> </tr> <tr> <td height="' + height2 + '" class="animate" style="font-size:0;line-height:0;background-color:#d5d5d4;" bgcolor="#d5d5d4">&amp;nbsp;</td> </tr> </table></td> </tr> </table> </td> </tr> </table> </td> </tr> </table> <!--[if (gte mso 9)|(IE)]> </td> </tr> </table> <![endif]-->'
+				return '<td valign="bottom"><!--[if (gte mso 9)|(IE)]> <table width="' + barWidth + '" align="center" cellpadding="0" cellspacing="0" border="0"> <tr> <td> <![endif]--> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:' + barWidth + 'px" align="center"> <tr> <td valign="bottom" align="center" width="50%" style="width:50%"> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%" align="left"> <tr> <td> <table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td height="' + antiheight1 + '" style="font-size:0px; line-height:0px;">&nbsp;</td> </tr> </table> <table width="100%" cellpadding="0" cellspacing="0" border="0"> <tr> <td align="left" valign="bottom"><table width="100%" cellpadding="0" cellspacing="0" border="0" class="chartWidth" style="width:100%"> <tr> <td align="center" class="label" style="color: #717172; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 28px; text-align:left; padding-left:3px;" contenteditable>' + topLabel1 + '</td> </tr> <tr> <td height="7" style="font-size:1px;line-height:1px"></td> </tr> <tr> <td height="' + height1 + '" class="animate" style="font-size:0;line-height:0;background-color:' + chartColor + ';" bgcolor="' + chartColor + '">&amp;nbsp;</td> </tr> </table></td> </tr> </table> </td> </tr> </table></td><td valign="bottom" align="center" width="50%" style="width:50%"><table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%" align="left"> <tr> <td> <table width="100%" border="0" cellpadding="0" cellspacing="0"> <tr> <td height="' + antiheight2 + '" style="font-size:0px; line-height:0px;">&nbsp;</td> </tr> </table> <table width="100%" cellpadding="0" cellspacing="0" border="0"> <tr> <td align="left" valign="bottom"><table width="100%" cellpadding="0" cellspacing="0" border="0" class="chartWidth" style="width:100%"> <tr> <td align="center" class="label" style="color: #717172; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 16px; line-height: 28px; text-align:left; padding-left:3px;" contenteditable>' + topLabel2 + '</td> </tr> <tr> <td height="7" style="font-size:1px;line-height:1px"></td> </tr> <tr> <td height="' + height2 + '" class="animate" style="font-size:0;line-height:0;background-color:#d5d5d4;" bgcolor="#d5d5d4">&amp;nbsp;</td> </tr> </table></td> </tr> </table> </td> </tr> </table> </td> </tr> </table> <!--[if (gte mso 9)|(IE)]> </td> </tr> </table> <![endif]-->'
 			},
-			horizontalChart: function (percentage, bottomLabel, topLabel) {
-				return '<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:0;border-collapse:collapse;border-spacing:0;mso-table-lspace:0;mso-table-rspace:0;width:100%"> <tr> <td width="15%" style="border-right:1px solid #c3c8c9; color:#000000;direction:ltr;font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;font-size:14px;line-height:28px;padding-top:15px;text-align:left;vertical-align:top; text-align:right; padding-right:5px; min-width:55px;" valign="top">' + bottomLabel + '</td> <td width="85%" style="direction:ltr;vertical-align:top" valign="top"><table border="0" cellpadding="0" cellspacing="0" width="100%" align="left" style="border:0;border-collapse:collapse;border-spacing:0;mso-table-lspace:0;mso-table-rspace:0;table-layout:fixed;width:100%"> <tr> <td align="left" style="direction:ltr"><table style="border:0;border-collapse:collapse;border-spacing:0;mso-table-lspace:0;mso-table-rspace:0;width:' + percentage + '%" class="bar"> <tr> <td align="left" style="direction:ltr;padding-bottom:15px;padding-left:0;padding-top:15px"><table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color:#cfedb5; border:0;border-collapse:collapse;border-spacing:0;mso-table-lspace:0;mso-table-rspace:0;width:100%" bgcolor="#cfedb5"> <tr> <td height="40" style="font-size:0;line-height:0;">&amp;nbsp;</td> </tr> </table></td> <td width="40" align="left" style="color:#717172;direction:ltr;font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;font-size:16px;line-height:28px;padding-left:8px;padding-top:15px;text-align:left;vertical-align:top; max-width:40px;" valign="top">' + topLabel + '</td> </tr> </table></td> </tr> </table></td> </tr> </table>'
+			horizontalChart: function (percentage, bottomLabel, topLabel, color) {
+				return '<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border:0;border-collapse:collapse;border-spacing:0;mso-table-lspace:0;mso-table-rspace:0;width:100%"> <tr> <td width="15%" style="border-right:1px solid #c3c8c9; color:#000000;direction:ltr;font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;font-size:14px;line-height:28px;padding-top:10px;text-align:left;vertical-align:top; text-align:right; padding-right:5px; min-width:55px;" valign="top" class="label" contenteditable>' + bottomLabel + '</td> <td width="85%" style="direction:ltr;vertical-align:top" valign="top"><table border="0" cellpadding="0" cellspacing="0" width="100%" align="left" style="border:0;border-collapse:collapse;border-spacing:0;mso-table-lspace:0;mso-table-rspace:0;table-layout:fixed;width:100%"> <tr> <td align="left" style="direction:ltr"><table style="border:0;border-collapse:collapse;border-spacing:0;mso-table-lspace:0;mso-table-rspace:0;width:' + percentage + '%" class="bar"> <tr> <td align="left" style="direction:ltr;padding-bottom:15px;padding-left:0;padding-top:15px"><table width="100%" border="0" cellpadding="0" cellspacing="0" style="background-color:' + color + '; border:0;border-collapse:collapse;border-spacing:0;mso-table-lspace:0;mso-table-rspace:0;width:100%" bgcolor="' + color + '"> <tr> <td height="40" style="font-size:0;line-height:0;">&amp;nbsp;</td> </tr> </table></td> <td width="40" align="left" style="color:#717172;direction:ltr;font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif;font-size:16px;line-height:28px;padding-left:8px;padding-top:20px;text-align:left;vertical-align:top; max-width:40px;" valign="top" class="label" contenteditable>' + topLabel + '</td> </tr> </table></td> </tr> </table></td> </tr> </table>'
 			},
 			bottomLabels: function (width, bottomLabel) {
 				return '<td valign="top"><!--[if (gte mso 9)|(IE)]> <table width="' + width + '" align="center" cellpadding="0" cellspacing="0" border="0"> <tr> <td> <![endif]--> <table width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:' + width + 'px" align="center"> <tr> <td valign="bottom" align="center"> <table width="100%" cellpadding="0" cellspacing="0" border="0" class="chartWidth" style="width:100%"><tr><td><table width="' + width + '" style="width:100%" border="0" cellpadding="0" cellspacing="0" class="" align="left"> <tr> <td height="7" style="font-size:1px;line-height:1px"> </td> </tr> <tr> <td align="center" class="labelBot" style="color: #000000; font-family: &#39;Helvetica Neue&#39;, Helvetica, Arial, sans-serif; font-size: 14px; line-height: 28px; text-align:left;" contenteditable>' + bottomLabel + '</td> </tr> </table></td> </tr> </table></td> </tr> </table> <!--[if (gte mso 9)|(IE)]> </td> </tr> </table> <![endif]-->'
@@ -269,16 +305,16 @@ var chartMarkup = {
 				return '</td> <td width="10%"><table width="100%" border="0" cellpadding="0" cellspacing="0" > <tr> <td>&nbsp;</td> </tr> </table></td>'
 			},
 			chartInputs: function (numberOfBars) {
-				var inject = "<p>Enter a value for each chart between 1 and 100. This will corespond to the height of the chart.";
+				var inject = "<p>Enter a value for each chart between 1 and 100. This will correspond to the height of the chart.</p>";
 				for (var i = 1; i <= numberOfBars; i++) {
 					inject += '<div class="row chartInputRow"><div class="col inputCol"><label for="height' + i + '">Bar # ' + i + ' </label><br><input type="number" name="percentage" id="height' + i + '" placeholder="Enter bar height" value="" min="1" max="100"></div></div>'
 				}
 				return inject;
 			},
 			chartInputsCompare: function (numberOfBars) {
-				var inject = "<p>Enter a value for each chart between 1 and 100. This will corespond to the height of the chart.";
+				var inject = "<p>Enter a value for each chart between 1 and 100. This will correspond to the height of the chart.</p>";
 				for (var i = 1; i <= numberOfBars; i++) {
-					inject += '<div class="row chartInputRow"><div class="col inputCol"><label for="height' + i + '">Group ' + i + ' </label><br><input type="number" name="percentage" class="sideInputs" id="height' + i + '" placeholder="Enter bar height" value="" min="1" max="100"><input type="number" name="percentage" class="sideInputs" id="height' + i + i+ '" placeholder="Enter bar height" value="" min="1" max="100"></div></div>'
+					inject += '<div class="row chartInputRow"><div class="col inputCol"><label for="height' + i + '">Group ' + i + ' </label><br><input type="number" name="percentage" class="sideInputs" id="height' + i + '" placeholder="Enter bar height" value="" min="1" max="100"><input type="number" name="percentage" class="sideInputs" id="height' + i + i + '" placeholder="Enter bar height" value="" min="1" max="100"></div></div>'
 				}
 				return inject;
 			},
@@ -301,10 +337,10 @@ $('#chartInput').on('keyup', '[id^=height]', function () {
 });
 //monitor keystrokes and auto update code when typing labels
 $('#live').on('load', function () {
-	$(this).contents().find('table').one('focus', '[class^=label]', function (e) {
+	$(this).contents().find('.wrap90').one('focus', '[class^=label]', function (e) {
 		$(this).html('');
 	});
-	$(this).contents().find('body').on('keyup, focus', '[class^=label]', function (e) {
+	$(this).contents().find('body').on('keyup', '[class^=label]', function (e) {
 		model.update();
 	});
 });
@@ -312,12 +348,10 @@ $('#live').on('load', function () {
 $(function () {
 	$('#colorPicker').colorpicker({
 		color: '#17a2b8'
-	}).on('changeColor', function(e) {
-            $('.buildBtn')[0].style.backgroundColor = e.color.toString(
-                'rgba');
-            $('.buildBtn')[0].style.borderColor = e.color.toString(
-                'rgba');
-        });;
+	}).on('changeColor', function (e) {
+		$('.buildBtn')[0].style.backgroundColor = e.color.toString('rgba');
+		$('.buildBtn')[0].style.borderColor = e.color.toString('rgba');
+	});;
 });
 //clipboard code
 var clipboard = new Clipboard('.htmlCopy');

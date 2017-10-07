@@ -6,14 +6,12 @@ function locationHorz(x) {
   'use strict'
   // get values
   var z = document.getElementById(x);
-  var horizontal = z.value;
-  return horizontal;
+  return z.value;
 }
 
 function locationVert(y) {
   var p = document.getElementById(y);
-  var vertical = p.value;
-  return vertical;
+return  p.value;
 }
 
 //start the table HTML

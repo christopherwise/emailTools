@@ -29,43 +29,43 @@ var model = {
 		return board;
 	},
 	buildTableBody: function () {
-		//get values
-		var horizontal = model.activeTable.horizontalNumber;
-		var vertical = model.activeTable.verticalNumber;
-		var end = (vertical - 1);
-		tableBody = [];
-		var board = "</tr><tr>";
-		tableBody.push(board);
-		// pull in table body
-		for (var y = 0; y < vertical; y++) {
-			for (var x = 0; x < horizontal; x++) {
-				var id = '#z' + y + x;
-				var content = $("#live").contents().find(id).html();
-				if (content == null) {
-					content = "";
+			//get values
+			var horizontal = model.activeTable.horizontalNumber;
+			var vertical = model.activeTable.verticalNumber;
+			var end = (vertical - 1);
+			tableBody = [];
+			var board = "</tr><tr>";
+			tableBody.push(board);
+			// pull in table body
+			for (var y = 0; y < vertical; y++) {
+				for (var x = 0; x < horizontal; x++) {
+					var id = '#z' + y + x;
+					var content = $("#live").contents().find(id).html();
+					if (content == null) {
+						content = "";
+					}
+					console.log(id);
+					console.log(content);
+					tableBody += markup.tableBody(x, y, content);
 				}
-				console.log(id);
-				console.log(content);
-				tableBody += markup.tableBody(x, y, content);
+				if (y == end) {
+					tableBody += "</tr>";
+				} else if (y !== end) {
+					tableBody += "</tr><tr>";
+				}
 			}
-			if (y == end) {
-				tableBody += "</tr>";
-			} else if (y !== end) {
-				tableBody += "</tr><tr>";
-			}
+			tableBody += "</table>"
+			return tableBody;
 		}
-		tableBody += "</table>"
-		return tableBody;
-	}
-	// ,
-	// create: function () {
-	// 	var tableHtmlElms = [];
-	// 	var board = model.buildTableBody();
-	// 	var tableCss = markup.cssHead(board);
-	// 	var liveDisplay = tableHtmlElms.unshift(tableCss, board);
-	// 	liveDisplay = tableHtmlElms.join('');
-	// 	return liveDisplay;
-	// }
+		// ,
+		// create: function () {
+		// 	var tableHtmlElms = [];
+		// 	var board = model.buildTableBody();
+		// 	var tableCss = markup.cssHead(board);
+		// 	var liveDisplay = tableHtmlElms.unshift(tableCss, board);
+		// 	liveDisplay = tableHtmlElms.join('');
+		// 	return liveDisplay;
+		// }
 };
 var controller = {
 	getvalue: function (x) {
@@ -94,11 +94,12 @@ var view = {
 		full += body;
 		full = cssArray.unshift(liveCss, full);
 		full = cssArray.join('')
-		this.output(full);
+		this.output(full, 'live');
+		this.writeCode('htmlCode', full)
 	},
-	output: function (content) {
+	output: function (content, id) {
 		//output to iframe
-		var doc = document.getElementById('live').contentWindow.document;
+		var doc = document.getElementById(id).contentWindow.document;
 		doc.open();
 		doc.write(content);
 		doc.close();
@@ -112,7 +113,16 @@ var view = {
 	},
 	writeCode: function (id, print) {
 		var destination = document.getElementById(id);
+		print = print.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable/g, '');
 		destination.innerHTML = print;
+	}
+	,
+	updateBodyHtml: function () {
+		// remove content editable tags before printing final code
+		var finalCode = $('#live').contents().find('body').html();
+		finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable=\"\"/g, '');
+		// output to page
+		this.writeCode('htmlCode', finalCode);
 	}
 };
 var markup = {
@@ -140,8 +150,18 @@ var markup = {
 	}
 };
 /* -- event listenrs -- */
+//clipboard code
+var clipboard = new Clipboard('.cssCopy');
+var clipboard2 = new Clipboard('.htmlCopy');
+clipboard.on('success', function (e) {
+	console.log(e);
+});
+clipboard.on('error', function (e) {
+	console.log(e);
+});
 $('#live').on('load', function () {
 	$(this).contents().find('body').on('keyup', '.responsive-stacked-table', function (e) {
 		view.updateHeadCss();
+		view.updateBodyHtml();
 	});
 });

@@ -5,15 +5,14 @@
   background-color: #ffffff; }
 
 #live {
-  width: 100%;
-  height: 300px; }
+  width: 100%; }
 
 iframe {
   margin: 0;
   padding: 0;
   border: none;
-  width: value;
-  height: value; }
+  width: 100%;
+  height: 100%; }
 
 .topRow {
   padding-top: 3em; }
@@ -39,6 +38,9 @@ iframe {
 .sideInputs {
   display: inline-block;
   float: left; }
+
+.floatRight {
+  float: right; }
 
 body {
   background-color: #fcfcfc; }
@@ -118,6 +120,19 @@ input, #colorPicker {
 
 .show {
   display: block; }
+
+.mobileDiv {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  width: 320px !important; }
+
+.desktopDiv {
+  width: 100% !important; }
+
+.frameWrapper {
+  width: 100%;
+  height: 300px; }
 
 #alerts-container {
   position: fixed;

@@ -57,15 +57,6 @@ var model = {
 			tableBody += "</table>"
 			return tableBody;
 		}
-		// ,
-		// create: function () {
-		// 	var tableHtmlElms = [];
-		// 	var board = model.buildTableBody();
-		// 	var tableCss = markup.cssHead(board);
-		// 	var liveDisplay = tableHtmlElms.unshift(tableCss, board);
-		// 	liveDisplay = tableHtmlElms.join('');
-		// 	return liveDisplay;
-		// }
 };
 var controller = {
 	getvalue: function (x) {
@@ -95,7 +86,8 @@ var view = {
 		full = cssArray.unshift(liveCss, full);
 		full = cssArray.join('')
 		this.output(full, 'live');
-		this.writeCode('htmlCode', full)
+		this.writeCode('htmlCode', full);
+		view.alert("Click into the live table to edit the content", "success", 2000);;
 	},
 	output: function (content, id) {
 		//output to iframe
@@ -113,16 +105,28 @@ var view = {
 	},
 	writeCode: function (id, print) {
 		var destination = document.getElementById(id);
-		print = print.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable/g, '');
+		print = print.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable=\"\"|contenteditable/g, '');
 		destination.innerHTML = print;
 	}
 	,
 	updateBodyHtml: function () {
 		// remove content editable tags before printing final code
 		var finalCode = $('#live').contents().find('body').html();
-		finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable=\"\"/g, '');
+		finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable=\"\"|contenteditable/g, '');
 		// output to page
 		this.writeCode('htmlCode', finalCode);
+	},
+	alert: function (message, type, closeDelay) {
+		// function to  display alerts at the top of the page based on user input
+		type = type || "info";
+		// create the alert div
+		var alert = $('<div class="alert alert-' + type + ' role="alert">').append($('<button type="button" class="close" data-dismiss="alert">').append("&times;")).append(message);
+		// add the alert div to top of alerts-container, use append() to add to bottom
+		$("#alerts-container").prepend(alert);
+		// if closeDelay was passed - set a timeout to close the alert
+		if (closeDelay) window.setTimeout(function () {
+			alert.alert("close")
+		}, closeDelay);
 	}
 };
 var markup = {
@@ -131,7 +135,7 @@ var markup = {
 		return ('<th align="left" style="font-family: &#39;ClanPro-News&#39;,&#39;HelveticaNeue-Light&#39;, &#39;Helvetica Neue Light&#39;, Helvetica, Arial, sans-serif; color:#000000; font-size:16px; line-height:24px; padding:20px 3%; border:1px solid #e5e5e4;" class="border" id="head' + id + '" contenteditable>' + headLabel + "</th>");
 	},
 	tableBody: function (x, y, content) {
-		return ('<td align="left" style="font-family: &#39;ClanPro-Book&#39;,&#39;HelveticaNeue-Light&#39;, &#39;Helvetica Neue Light&#39;, Helvetica, Arial, sans-serif; color:#000000; font-size:14px; line-height:24px; padding:20px 3%; border:1px solid #e5e5e4;" class="border cedit" id="z' + y + x + '" contenteditable>' + content + '</td>');
+		return ('<td align="left" style="font-family: &#39;ClanPro-Book&#39;,&#39;HelveticaNeue-Light&#39;, &#39;Helvetica Neue Light&#39;, Helvetica, Arial, sans-serif; color:#000000; font-size:14px; line-height:24px; padding:20px 3%; border:1px solid #e5e5e4;" class="border" id="z' + y + x + '" contenteditable>' + content + '</td>');
 	},
 	cssHead: function () {
 		//get values
@@ -151,17 +155,45 @@ var markup = {
 };
 /* -- event listenrs -- */
 //clipboard code
-var clipboard = new Clipboard('.cssCopy');
-var clipboard2 = new Clipboard('.htmlCopy');
+var clipboard2 = new Clipboard('.cssCopy');
+clipboard2.on('success', function (e) {
+	view.alert("CSS Successfully copied!", "success", 2000);
+});
+clipboard2.on('error', function (e) {
+	view.alert("Something went wrong!", "danger", 2000);
+});
+var clipboard = new Clipboard('.htmlCopy');
+clipboard.on('success', function (e) {
+	view.alert("HTML Successfully copied!", "success", 2000);
+});
+clipboard.on('error', function (e) {
+	view.alert("Something went wrong!", "danger", 2000);
+});
 clipboard.on('success', function (e) {
 	console.log(e);
 });
 clipboard.on('error', function (e) {
 	console.log(e);
 });
+//update
 $('#live').on('load', function () {
 	$(this).contents().find('body').on('keyup', '.responsive-stacked-table', function (e) {
 		view.updateHeadCss();
 		view.updateBodyHtml();
 	});
+});
+//mobile preview
+$(document).ready(function() {
+  $("#mobileButton").click(function() {
+    $("#live").addClass("mobileDiv").removeClass("desktopDiv");
+    $("#mobileButton").parent().addClass("active");
+    $("#desktopButton").parent().removeClass("active");
+  });
+});
+$(document).ready(function() {
+  $("#desktopButton").click(function() {
+    $("#live").addClass("desktopDiv").removeClass("mobileDiv");
+    $("#desktopButton").parent().addClass("active");
+    $("#mobileButton").parent().removeClass("active");
+  });
 });

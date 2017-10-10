@@ -65,7 +65,7 @@ var model = {
 			// add code to active chart data object
 			this.activeChart.chartCode = code;
 			var finalCode = this.activeChart.chartCode;
-			finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable=\"\"/g, '');;
+			finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable=\"\"|contenteditable/g, '');;
 			$('#dump').html(finalCode);
 			//output to iframe
 			var doc = document.getElementById('live').contentWindow.document;
@@ -137,7 +137,7 @@ var model = {
 			// add code to active chart data object
 			this.activeChart.chartCode = code;
 			var finalCode = this.activeChart.chartCode;
-			finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable/g, '');;
+			finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable=\"\"|contenteditable/g, '');;
 			$('#dump').html(finalCode);
 			//output to iframe
 			var doc = document.getElementById('live').contentWindow.document;
@@ -154,7 +154,7 @@ var model = {
 		update: function () {
 			// remove content editable tags before printing final code
 			var finalCode = $('#live').contents().find('body').html();
-			finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable=\"\"/g, '');
+			finalCode = finalCode.replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/contenteditable=\"\"|contenteditable/g, '');
 			// output to page
 			$('#dump').html(finalCode);
 		},

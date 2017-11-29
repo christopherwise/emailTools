@@ -335,6 +335,21 @@ $('#chartInput').on('keyup', '[id^=height]', function () {
 		}
 	}
 });
+//mobile preview
+$(document).ready(function() {
+  $(".mobileButton").click(function() {
+    $("#live").addClass("mobileDiv").removeClass("desktopDiv");
+    $("#mobileButton").parent().addClass("active");
+    $("#desktopButton").parent().removeClass("active");
+  });
+});
+$(document).ready(function() {
+  $(".desktopButton").click(function() {
+    $("#live").addClass("desktopDiv").removeClass("mobileDiv");
+    $("#desktopButton").parent().addClass("active");
+    $("#mobileButton").parent().removeClass("active");
+  });
+});
 //monitor keystrokes and auto update code when typing labels
 $('#live').on('load', function () {
 	$(this).contents().find('.wrap90').one('focus', '[class^=label]', function (e) {

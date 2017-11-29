@@ -18,6 +18,7 @@ var model = {
 			if (headLabel == null) {
 				headLabel = "Edit here";
 			}
+
 			tableH += markup.tableHead(headLabel, x);
 		}
 		return tableH;
@@ -132,10 +133,10 @@ var view = {
 var markup = {
 	start: '<table class="responsive-stacked-table with-mobile-labels" border="0" cellpadding="0" cellspacing="0"  style="width:100%;"><tr>',
 	tableHead: function (headLabel, id) {
-		return ('<th align="left" style="font-family: &#39;ClanPro-News&#39;,&#39;HelveticaNeue-Light&#39;, &#39;Helvetica Neue Light&#39;, Helvetica, Arial, sans-serif; color:#000000; font-size:16px; line-height:24px; padding:20px 3%; border:1px solid #e5e5e4;" class="border" id="head' + id + '" contenteditable>' + headLabel + "</th>");
+		return ('<th align="left" style="font-family: &#39;HelveticaNeue-Light&#39;, &#39;Helvetica Neue Light&#39;, Helvetica, Arial, sans-serif; color:#000000; font-size:16px; line-height:24px; padding:20px 3%; border:1px solid #e5e5e4;" class="border" id="head' + id + '" contenteditable>' + headLabel + "</th>");
 	},
 	tableBody: function (x, y, content) {
-		return ('<td align="left" style="font-family: &#39;ClanPro-Book&#39;,&#39;HelveticaNeue-Light&#39;, &#39;Helvetica Neue Light&#39;, Helvetica, Arial, sans-serif; color:#000000; font-size:14px; line-height:24px; padding:20px 3%; border:1px solid #e5e5e4;" class="border" id="z' + y + x + '" contenteditable>' + content + '</td>');
+		return ('<td align="left" style="font-family: &#39;HelveticaNeue-Light&#39;, &#39;Helvetica Neue Light&#39;, Helvetica, Arial, sans-serif; color:#000000; font-size:14px; line-height:24px; padding:20px 3%; border:1px solid #e5e5e4;" class="border" id="z' + y + x + '" contenteditable>' + content + '</td>');
 	},
 	cssHead: function () {
 		//get values
@@ -184,14 +185,14 @@ $('#live').on('load', function () {
 });
 //mobile preview
 $(document).ready(function() {
-  $("#mobileButton").click(function() {
+  $(".mobileButton").click(function() {
     $("#live").addClass("mobileDiv").removeClass("desktopDiv");
     $("#mobileButton").parent().addClass("active");
     $("#desktopButton").parent().removeClass("active");
   });
 });
 $(document).ready(function() {
-  $("#desktopButton").click(function() {
+  $(".desktopButton").click(function() {
     $("#live").addClass("desktopDiv").removeClass("mobileDiv");
     $("#desktopButton").parent().addClass("active");
     $("#mobileButton").parent().removeClass("active");
